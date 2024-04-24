@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 import streamlit as st
-import openpyxl
 
 def read_file(uploaded_file):
     file_extension = os.path.splitext(uploaded_file.name)[-1]
