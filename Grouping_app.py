@@ -16,9 +16,6 @@ def group_people(people_df, num_groups, group_names, people_per_group, save_path
     # Shuffle the order of people
     people_df = people_df.sample(frac=1).reset_index(drop=True)
 
-    # Create the directory if it doesn't exist
-    os.makedirs(save_path, exist_ok=True)
-
     # Initialize empty groups/create empty groups
     groups = [[] for _ in range(num_groups)]
 
@@ -38,7 +35,7 @@ def group_people(people_df, num_groups, group_names, people_per_group, save_path
         group_df = pd.DataFrame(group, columns=people_df.columns)  # Use column names from original DataFrame
         file_name = os.path.join(save_path, f"{group_names[i]}.csv")
         group_df.to_csv(file_name, index=False)
-        st.write(f"Saved {len(group)} values to {file_name}")
+        st.write(f"Saved {len(group)} Values of your work to {file_name}")
 
 def main():
     st.title("RANDOM GROUPING APP")
