@@ -17,6 +17,9 @@ def group_people(people_df, num_groups, group_names, people_per_group, save_path
     # Shuffle the order of people
     people_df = people_df.sample(frac=1).reset_index(drop=True)
 
+# Create the directory if it doesn't exist
+os.makedirs(save_path, exist_ok=True)
+
     # Initialize empty groups/create empty groups
     groups = [[] for _ in range(num_groups)]
 
