@@ -13,7 +13,7 @@ def read_file(uploaded_file):
         st.error("Unsupported file format. Please upload a CSV or Excel file.")
         return None
 
-def group_people(records_df, num_groups, group_names, records_per_group):
+def group_records(records_df, num_groups, group_names, records_per_group):
     # Shuffle the order of Records
     records_df = records_df.sample(frac=1).reset_index(drop=True)
 
