@@ -29,12 +29,12 @@ def group_records(records_df, num_groups, group_names, records_per_group):
             group_counter += 1
             if group_counter >= num_groups:
                 group_counter = 0
-            groups[group_counter].append(people.tolist())
+            groups[group_counter].append(records.tolist())
 
     # Save each group to a separate CSV file with specified names
     file_links = []
     for i, group in enumerate(groups):
-        group_df = pd.DataFrame(group, columns=people_df.columns)  # For maintaining the column names from original DataFrame
+        group_df = pd.DataFrame(group, columns=records_df.columns)  # For maintaining the column names from original DataFrame
         csv = group_df.to_csv(index=False)
         b64 = base64.b64encode(csv.encode()).decode() 
         href = f'<a href="data:file/csv;base64,{b64}" download="{group_names[i]}.csv">Download {group_names[i]}</a>'
