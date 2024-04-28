@@ -43,7 +43,12 @@ def group_people(records_df, num_groups, group_names, records_per_group):
     return file_links
 
 def main():
-    st.title("FILE GROUPFY")
+    st.markdown(
+        """
+        <h1 style='text-align: center;'>File Groupfy</h1>
+        """,
+        unsafe_allow_html=True
+    )
 
     # File upload
     uploaded_file = st.file_uploader("Upload file", type=["csv", "xlsx"])
