@@ -24,7 +24,7 @@ def group_records(records_df, num_groups, group_names, records_per_group):
     group_counter = 0
     for i, records in records_df.iterrows():
         if len(groups[group_counter]) < records_per_group:
-            groups[group_counter].append(people.tolist())  # Append entire row of records as list
+            groups[group_counter].append(records.tolist())  # Append entire row of records as list
         else:
             group_counter += 1
             if group_counter >= num_groups:
