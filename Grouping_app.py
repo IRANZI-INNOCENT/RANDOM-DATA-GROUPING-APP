@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import streamlit as st
+import base64
 
 def read_file(uploaded_file):
     file_extension = os.path.splitext(uploaded_file.name)[-1]
@@ -12,12 +13,9 @@ def read_file(uploaded_file):
         st.error("Unsupported file format. Please upload a CSV or Excel file.")
         return None
 
-def group_people(people_df, num_groups, group_names, people_per_group, save_path):
+def group_people(people_df, num_groups, group_names, people_per_group):
     # Shuffle the order of people
     people_df = people_df.sample(frac=1).reset_index(drop=True)
-
-    # Ensure the specified directory exists
-    os.makedirs(save_path, exist_ok=True)
 
     # Initialize empty groups/create empty groups
     groups = [[] for _ in range(num_groups)]
@@ -34,17 +32,15 @@ def group_people(people_df, num_groups, group_names, people_per_group, save_path
             groups[group_counter].append(people.tolist())
 
     # Save each group to a separate CSV file with specified names
+    file_links = []
     for i, group in enumerate(groups):
         group_df = pd.DataFrame(group, columns=people_df.columns)  # Use column names from original DataFrame
-        file_name = os.path.join(save_path, f"{group_names[i]}.csv")
-        try:
-            group_df.to_csv(file_name, index=False)
-            st.write(f"Saved {len(group)} values to {file_name}")
-        except Exception as e:
-            st.error(f"Error saving file: {e}")
-
-        # Print the full path where the file is saved
-        st.write(f"File saved at: {os.path.abspath(file_name)}")
+        csv = group_df.to_csv(index=False)
+        b64 = base64.b64encode(csv.encode()).decode()  # Base64 encoding
+        href = f'<a href="data:file/csv;base64,{b64}" download="{group_names[i]}.csv">Download {group_names[i]}</a>'
+        file_links.append(href)
+    
+    return file_links
 
 def main():
     st.title("RANDOM GROUPING APP")
@@ -71,12 +67,11 @@ def main():
             # Students per group input
             people_per_group = st.number_input("Enter the number per group", min_value=1, step=1)
             
-            # Save path input
-            save_path = st.text_input("Enter directory to save grouped files")
-
             # Grouping button
-            if st.button("GROUP YOUR WORK") and save_path and len(group_names) == num_groups:
-                group_people(people_df, num_groups, group_names, people_per_group, save_path)
+            if st.button("GROUP YOUR WORK") and len(group_names) == num_groups:
+                file_links = group_people(people_df, num_groups, group_names, people_per_group)
+                for link in file_links:
+                    st.markdown(link, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
